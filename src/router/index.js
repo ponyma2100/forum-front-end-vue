@@ -6,6 +6,7 @@ import Restaurants from '../views/Restaurants.vue'
 
 Vue.use(VueRouter)
 
+
 const routes = [
   {
     path: '/',
@@ -51,6 +52,21 @@ const routes = [
     path: '/users/top',
     name: 'users-top',
     component: () => import('../views/UsersTop.vue')
+  },
+  {
+    path: '/admin',
+    exact: true,
+    redirect: '/admin/restaurants'
+  },
+  {
+    path: '/admin/restaurants',
+    name: 'admin-restaurants',
+    component: () => import('../views/AdminRestaurants.vue')
+  },
+  {
+    path: '/admin/restaurants/:id',
+    name: 'admin-restaurant',
+    component: () => import('../views/AdminRestaurant.vue')
   },
   {
     path: '*',
