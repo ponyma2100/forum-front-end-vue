@@ -90,6 +90,7 @@ export default {
       const {
         id,
         name,
+        Category,
         categoryName,
         image,
         opening_hours: openingHours,
@@ -101,7 +102,7 @@ export default {
         ...this.restaurant,
         id,
         name,
-        categoryName: categoryName ? categoryName : "未分類",
+        categoryName: Category ? Category.name : "未分類",
         image,
         openingHours,
         tel,

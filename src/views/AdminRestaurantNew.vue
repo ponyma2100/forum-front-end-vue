@@ -1,16 +1,16 @@
 <template>
   <div class="container py-5">
     <!-- 餐廳表單 AdminRestaurantForm -->
-    <AdminRestaurantNew @after-submit="handleAfterSubmit" />
+    <AdminRestaurantForm @after-submit="handleAfterSubmit" />
   </div>
 </template>
 
 <script>
-import AdminRestaurantNew from "./../components/AdminRestaurantForm";
+import AdminRestaurantForm from "./../components/AdminRestaurantForm";
 
 export default {
   components: {
-    AdminRestaurantNew,
+    AdminRestaurantForm,
   },
   methods: {
     handleAfterSubmit(formData) {
