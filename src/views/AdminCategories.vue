@@ -38,12 +38,44 @@
             {{ category.id }}
           </th>
           <td class="position-relative">
-            <div class="category-name">
+            <div class="category-name" v-show="!category.isEditing">
               {{ category.name }}
             </div>
+            <input
+              v-show="category.isEditing"
+              v-model="category.name"
+              type="text"
+              class="form-control"
+            />
+            <span
+              v-show="category.isEditing"
+              @click="handleCancel(category.id)"
+              class="cancel"
+              >✕</span
+            >
           </td>
           <td class="d-flex justify-content-between">
-            <button type="button" class="btn btn-link mr-2">Edit</button>
+            <button
+              v-show="!category.isEditing"
+              @click.stop.prevent="toggleIsEditing(category.id)"
+              type="button"
+              class="btn btn-link mr-2"
+            >
+              Edit
+            </button>
+            <button
+              v-show="category.isEditing"
+              @click.stop.prevent="
+                updateCategory({
+                  categoryId: category.id,
+                  name: category.name,
+                })
+              "
+              type="button"
+              class="btn btn-link mr-2"
+            >
+              Save
+            </button>
             <button
               @click.stop.prevent="deleteCategory(category.id)"
               type="button"
@@ -107,7 +139,12 @@ export default {
   methods: {
     fetchCategories() {
       const { categories } = dummyData;
-      this.categories = categories;
+      // 在每一個 category 中都添加一個 isEditing 屬性
+      this.categories = categories.map((category) => ({
+        ...category,
+        isEditing: false,
+        nameCached: "",
+      }));
     },
     createCategory(categoryName) {
       // TODO: 透過 API 告知伺服器欲新增的餐廳類別...
@@ -124,6 +161,68 @@ export default {
         (category) => category.id !== categoryId
       );
     },
+    toggleIsEditing(categoryId) {
+      this.categories = this.categories.map((category) => {
+        if (category.id === categoryId) {
+          return {
+            ...category,
+            isEditing: !category.isEditing,
+            nameCached: category.name,
+          };
+        }
+        return category;
+      });
+    },
+    updateCategory({ categoryId, name }) {
+      // TODO: 透過 API 去向伺服器更新餐廳類別名稱
+      this.toggleIsEditing(categoryId);
+    },
+    handleCancel(categoryId) {
+      this.categories = this.categories.map((category) => {
+        if (category.id === categoryId) {
+          return {
+            ...category,
+
+            // 把原本的餐廳類別名稱還回去
+            name: category.nameCached,
+          };
+        }
+
+        return category;
+      });
+
+      this.toggleIsEditing(categoryId);
+    },
   },
 };
 </script>
+
+<style scoped>
+.category-name {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid transparent;
+  outline: 0;
+  cursor: auto;
+}
+
+.btn-link {
+  width: 62px;
+}
+
+.cancel {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #aaaaaa;
+  border-radius: 50%;
+  user-select: none;
+  cursor: pointer;
+  font-size: 12px;
+}
+</style>
