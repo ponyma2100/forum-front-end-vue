@@ -34,7 +34,11 @@
         />
       </div>
 
-      <button class="btn btn-lg btn-primary btn-block mb-3" type="submit">
+      <button
+        :disabled="isProcessing"
+        class="btn btn-lg btn-primary btn-block mb-3"
+        type="submit"
+      >
         Submit
       </button>
 
@@ -58,6 +62,7 @@ export default {
     return {
       email: "",
       password: "",
+      isProcessing: false,
     };
   },
   methods: {
@@ -71,6 +76,7 @@ export default {
         });
         return;
       }
+      this.isProcessing = true;
 
       // TODO: 向後端驗證使用者登入資訊是否合法
       authorizationAPI
@@ -100,9 +106,9 @@ export default {
             icon: "warning",
             title: "請確認您輸入了正確的帳號密碼",
           });
+          this.isProcessing = false;
           console.log("error", error);
         });
-
       // const data = JSON.stringify({
       //   email: this.email,
       //   password: this.password,
