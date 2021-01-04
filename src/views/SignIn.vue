@@ -66,55 +66,94 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
-      // 如果 email 或 password 為空，則使用 Toast 提示
-      // 然後 return 不繼續往後執行
-      if (!this.email || !this.password) {
-        Toast.fire({
-          icon: "warning",
-          title: "請填入 email 和 password",
-        });
-        return;
-      }
-      this.isProcessing = true;
-
-      // TODO: 向後端驗證使用者登入資訊是否合法
-      authorizationAPI
-        .signIn({
-          email: this.email,
-          password: this.password,
-        })
-        .then((response) => {
-          // 取得 API 請求後的資料
-          const { data } = response;
-
-          // 驗證狀態
-          if (data.status !== "success") {
-            throw new Error(data.message);
-          }
-
-          // 將 token 存放在 localStorage 內
-          localStorage.setItem("token", data.token);
-
-          // 成功登入後轉址到餐廳首頁
-          this.$router.push("/restaurants");
-        })
-        .catch((error) => {
-          this.password = "";
-
+    async handleSubmit() {
+      try {
+        if (!this.email || !this.password) {
           Toast.fire({
             icon: "warning",
-            title: "請確認您輸入了正確的帳號密碼",
+            title: "請填入 email 和 password",
           });
-          this.isProcessing = false;
-          console.log("error", error);
+          return;
+        }
+        this.isProcessing = true;
+
+        // TODO: 向後端驗證使用者登入資訊是否合法
+        const response = await authorizationAPI.signIn({
+          email: this.email,
+          password: this.password,
         });
-      // const data = JSON.stringify({
-      //   email: this.email,
-      //   password: this.password,
-      // });
-      // console.log("data", data);
+        // 取得 API 請求後的資料
+        const { data } = response;
+        // 驗證狀態
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        // 將 token 存放在 localStorage 內
+        localStorage.setItem("token", data.token);
+
+        // 成功登入後轉址到餐廳首頁
+        this.$router.push("/restaurants");
+      } catch (error) {
+        this.password = "";
+
+        Toast.fire({
+          icon: "warning",
+          title: "請確認您輸入了正確的帳號密碼",
+        });
+        this.isProcessing = false;
+        console.log("error", error);
+      }
     },
   },
 };
+// handleSubmit() {
+//   // 如果 email 或 password 為空，則使用 Toast 提示
+//   // 然後 return 不繼續往後執行
+//   if (!this.email || !this.password) {
+//     Toast.fire({
+//       icon: "warning",
+//       title: "請填入 email 和 password",
+//     });
+//     return;
+//   }
+//   this.isProcessing = true;
+
+//   // TODO: 向後端驗證使用者登入資訊是否合法
+//   authorizationAPI
+//     .signIn({
+//       email: this.email,
+//       password: this.password,
+//     })
+//     .then((response) => {
+//       // 取得 API 請求後的資料
+//       const { data } = response;
+
+//       // 驗證狀態
+//       if (data.status !== "success") {
+//         throw new Error(data.message);
+//       }
+
+//       // 將 token 存放在 localStorage 內
+//       localStorage.setItem("token", data.token);
+
+//       // 成功登入後轉址到餐廳首頁
+//       this.$router.push("/restaurants");
+//     })
+//     .catch((error) => {
+//       this.password = "";
+
+//       Toast.fire({
+//         icon: "warning",
+//         title: "請確認您輸入了正確的帳號密碼",
+//       });
+//       this.isProcessing = false;
+//       console.log("error", error);
+//     });
+//   // const data = JSON.stringify({
+//   //   email: this.email,
+//   //   password: this.password,
+//   // });
+//   // console.log("data", data);
+// },
 </script>
