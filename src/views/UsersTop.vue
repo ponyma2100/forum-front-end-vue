@@ -26,155 +26,8 @@
 <script>
 import NavTabs from "./../components/NavTabs";
 import { emptyImageFilter } from "./../utils/mixins";
-
-const dummyData = {
-  users: [
-    {
-      id: 1,
-      name: "root",
-      email: "root@example.com",
-      password: "$2a$10$jBS/Y4.hceDXkEC5y9ZGne81Y7i5wNwNcy6wAKjNdBykCzlEfWmLm",
-      isAdmin: true,
-      image: null,
-      createdAt: "2020-12-15T06:35:43.000Z",
-      updatedAt: "2020-12-15T06:35:43.000Z",
-      Followers: [
-        {
-          id: 2,
-          name: "user1",
-          email: "user1@example.com",
-          password:
-            "$2a$10$m11qLlDOol1b3XCa393Bwe.hW4mt/6DS.mUsgFtati5LW4BbX81EG",
-          isAdmin: false,
-          image: null,
-          createdAt: "2020-12-15T06:35:43.000Z",
-          updatedAt: "2020-12-20T01:32:03.000Z",
-          Followship: {
-            followerId: 2,
-            followingId: 1,
-            createdAt: "2020-12-13T03:37:33.000Z",
-            updatedAt: "2020-12-13T03:37:33.000Z",
-          },
-        },
-        {
-          id: 1,
-          name: "root",
-          email: "root@example.com",
-          password:
-            "$2a$10$jBS/Y4.hceDXkEC5y9ZGne81Y7i5wNwNcy6wAKjNdBykCzlEfWmLm",
-          isAdmin: true,
-          image: null,
-          createdAt: "2020-12-15T06:35:43.000Z",
-          updatedAt: "2020-12-15T06:35:43.000Z",
-          Followship: {
-            followerId: 1,
-            followingId: 1,
-            createdAt: "2020-12-17T19:56:58.000Z",
-            updatedAt: "2020-12-17T19:56:58.000Z",
-          },
-        },
-      ],
-      FollowerCount: 5,
-      isFollowed: false,
-    },
-    {
-      id: 2,
-      name: "user1",
-      email: "user1@example.com",
-      password: "$2a$10$m11qLlDOol1b3XCa393Bwe.hW4mt/6DS.mUsgFtati5LW4BbX81EG",
-      isAdmin: false,
-      image: null,
-      createdAt: "2020-12-15T06:35:43.000Z",
-      updatedAt: "2020-12-20T01:32:03.000Z",
-      Followers: [
-        {
-          id: 2,
-          name: "user1",
-          email: "user1@example.com",
-          password:
-            "$2a$10$m11qLlDOol1b3XCa393Bwe.hW4mt/6DS.mUsgFtati5LW4BbX81EG",
-          isAdmin: false,
-          image: null,
-          createdAt: "2020-12-15T06:35:43.000Z",
-          updatedAt: "2020-12-20T01:32:03.000Z",
-          Followship: {
-            followerId: 2,
-            followingId: 2,
-            createdAt: "2020-12-13T03:37:28.000Z",
-            updatedAt: "2020-12-13T03:37:28.000Z",
-          },
-        },
-        {
-          id: 1,
-          name: "root",
-          email: "root@example.com",
-          password:
-            "$2a$10$jBS/Y4.hceDXkEC5y9ZGne81Y7i5wNwNcy6wAKjNdBykCzlEfWmLm",
-          isAdmin: true,
-          image: null,
-          createdAt: "2020-12-15T06:35:43.000Z",
-          updatedAt: "2020-12-15T06:35:43.000Z",
-          Followship: {
-            followerId: 1,
-            followingId: 2,
-            createdAt: "2020-12-17T19:20:56.000Z",
-            updatedAt: "2020-12-17T19:20:56.000Z",
-          },
-        },
-      ],
-      FollowerCount: 2,
-      isFollowed: true,
-    },
-    {
-      id: 3,
-      name: "user2",
-      email: "user2@example.com",
-      password: "$2a$10$IgMneSD6HZiHt0C6we./cOPyq70YhAWNZEqC4YTtJHK8ejgS1J/3q",
-      isAdmin: false,
-      image: null,
-      createdAt: "2020-12-15T06:35:43.000Z",
-      updatedAt: "2020-12-15T06:35:43.000Z",
-      Followers: [
-        {
-          id: 2,
-          name: "user1",
-          email: "user1@example.com",
-          password:
-            "$2a$10$m11qLlDOol1b3XCa393Bwe.hW4mt/6DS.mUsgFtati5LW4BbX81EG",
-          isAdmin: false,
-          image: null,
-          createdAt: "2020-12-15T06:35:43.000Z",
-          updatedAt: "2020-12-20T01:32:03.000Z",
-          Followship: {
-            followerId: 2,
-            followingId: 3,
-            createdAt: "2020-12-13T03:37:29.000Z",
-            updatedAt: "2020-12-13T03:37:29.000Z",
-          },
-        },
-        {
-          id: 1,
-          name: "root",
-          email: "root@example.com",
-          password:
-            "$2a$10$jBS/Y4.hceDXkEC5y9ZGne81Y7i5wNwNcy6wAKjNdBykCzlEfWmLm",
-          isAdmin: true,
-          image: null,
-          createdAt: "2020-12-15T06:35:43.000Z",
-          updatedAt: "2020-12-15T06:35:43.000Z",
-          Followship: {
-            followerId: 1,
-            followingId: 3,
-            createdAt: "2020-12-17T19:20:58.000Z",
-            updatedAt: "2020-12-17T19:20:58.000Z",
-          },
-        },
-      ],
-      FollowerCount: 2,
-      isFollowed: true,
-    },
-  ],
-};
+import userAPI from "./../apis/users";
+import { Toast } from "./../utils/helpers";
 
 export default {
   components: {
@@ -191,9 +44,24 @@ export default {
     this.fetchTopUsers();
   },
   methods: {
-    fetchTopUsers() {
-      const { users } = dummyData;
-      this.users = users;
+    async fetchTopUsers() {
+      try {
+        const { data } = await userAPI.getTopUsers();
+        console.log(data.users);
+        this.users = data.users.map((user) => ({
+          id: user.id,
+          name: user.name,
+          image: user.image,
+          followerCount: user.followerCount,
+          isFollowed: user.isFollowed,
+        }));
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得美食達人，請稍後再試",
+        });
+      }
     },
     // addFollowed() {
     //   this.user = {
@@ -210,4 +78,152 @@ export default {
     // },
   },
 };
+// const dummyData = {
+//   users: [
+//     {
+//       id: 1,
+//       name: "root",
+//       email: "root@example.com",
+//       password: "$2a$10$jBS/Y4.hceDXkEC5y9ZGne81Y7i5wNwNcy6wAKjNdBykCzlEfWmLm",
+//       isAdmin: true,
+//       image: null,
+//       createdAt: "2020-12-15T06:35:43.000Z",
+//       updatedAt: "2020-12-15T06:35:43.000Z",
+//       Followers: [
+//         {
+//           id: 2,
+//           name: "user1",
+//           email: "user1@example.com",
+//           password:
+//             "$2a$10$m11qLlDOol1b3XCa393Bwe.hW4mt/6DS.mUsgFtati5LW4BbX81EG",
+//           isAdmin: false,
+//           image: null,
+//           createdAt: "2020-12-15T06:35:43.000Z",
+//           updatedAt: "2020-12-20T01:32:03.000Z",
+//           Followship: {
+//             followerId: 2,
+//             followingId: 1,
+//             createdAt: "2020-12-13T03:37:33.000Z",
+//             updatedAt: "2020-12-13T03:37:33.000Z",
+//           },
+//         },
+//         {
+//           id: 1,
+//           name: "root",
+//           email: "root@example.com",
+//           password:
+//             "$2a$10$jBS/Y4.hceDXkEC5y9ZGne81Y7i5wNwNcy6wAKjNdBykCzlEfWmLm",
+//           isAdmin: true,
+//           image: null,
+//           createdAt: "2020-12-15T06:35:43.000Z",
+//           updatedAt: "2020-12-15T06:35:43.000Z",
+//           Followship: {
+//             followerId: 1,
+//             followingId: 1,
+//             createdAt: "2020-12-17T19:56:58.000Z",
+//             updatedAt: "2020-12-17T19:56:58.000Z",
+//           },
+//         },
+//       ],
+//       FollowerCount: 5,
+//       isFollowed: false,
+//     },
+//     {
+//       id: 2,
+//       name: "user1",
+//       email: "user1@example.com",
+//       password: "$2a$10$m11qLlDOol1b3XCa393Bwe.hW4mt/6DS.mUsgFtati5LW4BbX81EG",
+//       isAdmin: false,
+//       image: null,
+//       createdAt: "2020-12-15T06:35:43.000Z",
+//       updatedAt: "2020-12-20T01:32:03.000Z",
+//       Followers: [
+//         {
+//           id: 2,
+//           name: "user1",
+//           email: "user1@example.com",
+//           password:
+//             "$2a$10$m11qLlDOol1b3XCa393Bwe.hW4mt/6DS.mUsgFtati5LW4BbX81EG",
+//           isAdmin: false,
+//           image: null,
+//           createdAt: "2020-12-15T06:35:43.000Z",
+//           updatedAt: "2020-12-20T01:32:03.000Z",
+//           Followship: {
+//             followerId: 2,
+//             followingId: 2,
+//             createdAt: "2020-12-13T03:37:28.000Z",
+//             updatedAt: "2020-12-13T03:37:28.000Z",
+//           },
+//         },
+//         {
+//           id: 1,
+//           name: "root",
+//           email: "root@example.com",
+//           password:
+//             "$2a$10$jBS/Y4.hceDXkEC5y9ZGne81Y7i5wNwNcy6wAKjNdBykCzlEfWmLm",
+//           isAdmin: true,
+//           image: null,
+//           createdAt: "2020-12-15T06:35:43.000Z",
+//           updatedAt: "2020-12-15T06:35:43.000Z",
+//           Followship: {
+//             followerId: 1,
+//             followingId: 2,
+//             createdAt: "2020-12-17T19:20:56.000Z",
+//             updatedAt: "2020-12-17T19:20:56.000Z",
+//           },
+//         },
+//       ],
+//       FollowerCount: 2,
+//       isFollowed: true,
+//     },
+//     {
+//       id: 3,
+//       name: "user2",
+//       email: "user2@example.com",
+//       password: "$2a$10$IgMneSD6HZiHt0C6we./cOPyq70YhAWNZEqC4YTtJHK8ejgS1J/3q",
+//       isAdmin: false,
+//       image: null,
+//       createdAt: "2020-12-15T06:35:43.000Z",
+//       updatedAt: "2020-12-15T06:35:43.000Z",
+//       Followers: [
+//         {
+//           id: 2,
+//           name: "user1",
+//           email: "user1@example.com",
+//           password:
+//             "$2a$10$m11qLlDOol1b3XCa393Bwe.hW4mt/6DS.mUsgFtati5LW4BbX81EG",
+//           isAdmin: false,
+//           image: null,
+//           createdAt: "2020-12-15T06:35:43.000Z",
+//           updatedAt: "2020-12-20T01:32:03.000Z",
+//           Followship: {
+//             followerId: 2,
+//             followingId: 3,
+//             createdAt: "2020-12-13T03:37:29.000Z",
+//             updatedAt: "2020-12-13T03:37:29.000Z",
+//           },
+//         },
+//         {
+//           id: 1,
+//           name: "root",
+//           email: "root@example.com",
+//           password:
+//             "$2a$10$jBS/Y4.hceDXkEC5y9ZGne81Y7i5wNwNcy6wAKjNdBykCzlEfWmLm",
+//           isAdmin: true,
+//           image: null,
+//           createdAt: "2020-12-15T06:35:43.000Z",
+//           updatedAt: "2020-12-15T06:35:43.000Z",
+//           Followship: {
+//             followerId: 1,
+//             followingId: 3,
+//             createdAt: "2020-12-17T19:20:58.000Z",
+//             updatedAt: "2020-12-17T19:20:58.000Z",
+//           },
+//         },
+//       ],
+//       FollowerCount: 2,
+//       isFollowed: true,
+//     },
+//   ],
+// };
 </script>
