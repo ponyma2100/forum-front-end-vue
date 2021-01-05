@@ -82,8 +82,7 @@ export default {
   methods: {
     async addFavorite(restaurantId) {
       try {
-        const { data } = await userAPI.addfavorite({ restaurantId });
-
+        const { data } = await userAPI.addFavorite({ restaurantId });
         if (data.status !== "success") {
           throw new Error(data.message);
         }
@@ -101,7 +100,7 @@ export default {
     },
     async deleteFavorite(restaurantId) {
       try {
-        const { data } = await userAPI.deletefavorite({ restaurantId });
+        const { data } = await userAPI.deleteFavorite({ restaurantId });
 
         if (data.status !== "success") {
           throw new Error(data.message);
