@@ -29,7 +29,7 @@
 
             <button
               v-if="restaurant.isFavorited"
-              @click.stop.prevent="deleteFavorited"
+              @click.stop.prevent="deleteFavorite(restaurant.id)"
               type="button"
               class="btn btn-danger mr-2"
             >
@@ -37,7 +37,7 @@
             </button>
             <button
               v-else
-              @click.stop.prevent="addFavorited"
+              @click.stop.prevent="addFavorite(restaurant.id)"
               type="button"
               class="btn btn-primary"
             >
@@ -54,8 +54,8 @@
 import NavTabs from "./../components/NavTabs";
 import { emptyImageFilter } from "./../utils/mixins";
 import restaurantsAPI from "./../apis/restaurants";
+import userAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
-import restaurants from "./../apis/restaurants";
 
 export default {
   mixins: [emptyImageFilter],
@@ -81,6 +81,58 @@ export default {
         Toast.fire({
           icon: "error",
           title: "目前無法取得人氣餐廳資料，請稍後再試",
+        });
+      }
+    },
+    async addFavorite(restaurantId) {
+      try {
+        const { data } = await userAPI.addFavorite({ restaurantId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        this.restaurants = this.restaurants.map((restaurant) => {
+          if (restaurant.id !== restaurantId) {
+            return restaurant;
+          } else {
+            return {
+              ...restaurant,
+              isFavorited: true,
+              FavoriteCount: restaurant.FavoriteCount + 1,
+            };
+          }
+        });
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "目前無法將餐廳加入最愛，請稍後再試",
+        });
+      }
+    },
+    async deleteFavorite(restaurantId) {
+      try {
+        const { data } = await userAPI.deleteFavorite({ restaurantId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        this.restaurants = this.restaurants.map((restaurant) => {
+          if (restaurant.id !== restaurantId) {
+            return restaurant;
+          } else {
+            return {
+              ...restaurant,
+              isFavorited: false,
+              FavoriteCount: restaurant.FavoriteCount - 1,
+            };
+          }
+        });
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "目前無法將餐廳移除最愛，請稍後再試",
         });
       }
     },
