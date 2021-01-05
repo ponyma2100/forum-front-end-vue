@@ -10,13 +10,25 @@
         </a>
         <h2>{{ user.name }}</h2>
         <span class="badge badge-secondary"
-          >追蹤人數：{{ user.FollowerCount }}</span
+          >追蹤人數：{{ user.followerCount }}</span
         >
         <p class="mt-3">
-          <button v-if="user.isFollowed" type="button" class="btn btn-danger">
+          <button
+            v-if="user.isFollowed"
+            @click.stop.prevent="deleteFollowing(user.id)"
+            type="button"
+            class="btn btn-danger"
+          >
             取消追蹤
           </button>
-          <button v-else type="button" class="btn btn-primary">追蹤</button>
+          <button
+            v-else
+            @click.stop.prevent="addFollowing(user.id)"
+            type="button"
+            class="btn btn-primary"
+          >
+            追蹤
+          </button>
         </p>
       </div>
     </div>
@@ -47,12 +59,12 @@ export default {
     async fetchTopUsers() {
       try {
         const { data } = await userAPI.getTopUsers();
-        console.log(data.users);
+        // console.log(data.users);
         this.users = data.users.map((user) => ({
           id: user.id,
           name: user.name,
           image: user.image,
-          followerCount: user.followerCount,
+          followerCount: user.FollowerCount,
           isFollowed: user.isFollowed,
         }));
       } catch (error) {
@@ -63,19 +75,60 @@ export default {
         });
       }
     },
-    // addFollowed() {
-    //   this.user = {
-    //     ...this.users,
-    //     isFollowed: true,
-    //   };
-    //   console.log(...this.user);
-    // },
-    // deleteFollowed() {
-    //   this.users = {
-    //     ...this.users,
-    //     isFollowed: false,
-    //   };
-    // },
+    async addFollowing(userId) {
+      try {
+        const { data } = await userAPI.addFollowing({ userId });
+        console.log("data", data);
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        this.users = this.users.map((user) => {
+          if (user.id !== userId) {
+            return user;
+          } else {
+            return {
+              ...user,
+              isFollowed: true,
+              followerCount: user.followerCount + 1,
+            };
+          }
+        });
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法加入追蹤，請稍後再試",
+        });
+      }
+    },
+    async deleteFollowing(userId) {
+      try {
+        const { data } = await userAPI.deleteFollowing({ userId });
+        console.log("data", data);
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        this.users = this.users.map((user) => {
+          if (user.id !== userId) {
+            return user;
+          } else {
+            return {
+              ...user,
+              isFollowed: false,
+              followerCount: user.followerCount - 1,
+            };
+          }
+        });
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取消追蹤，請稍後再試",
+        });
+      }
+    },
   },
 };
 // const dummyData = {
