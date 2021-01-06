@@ -3,6 +3,7 @@
     <!-- 餐廳表單 AdminRestaurantForm -->
     <AdminRestaurantForm
       :initial-restaurant="restaurant"
+      :is-processing="isProcessing"
       @after-submit="handleAfterSubmit"
     />
   </div>
@@ -29,12 +30,18 @@ export default {
         image: "",
         categoryId: 3,
       },
+      isProcessing: false,
     };
   },
 
   created() {
     const { id: restaurantId } = this.$route.params;
     this.fetchRestaurant(restaurantId);
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { id: restaurantId } = to.params;
+    this.fetchRestaurant(restaurantId);
+    next();
   },
   methods: {
     async fetchRestaurant(restaurantId) {
@@ -72,11 +79,28 @@ export default {
         });
       }
     },
-    handleAfterSubmit(formData) {
-      // TODO:  透過API 將表單資料送到伺服器
-      for (let [name, value] of formData.entries()) {
-        console.log(name + ":" + value);
+    async handleAfterSubmit(formData) {
+      try {
+        this.isProcessing = true;
+        // 透過API 將表單資料送到伺服器
+        const { data } = await adminAPI.restaurants.update({
+          restaurantId: this.restaurant.id,
+          formData,
+        });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.$router.push({ name: "admin-restaurants" });
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法更新餐廳資料，請稍後再試",
+        });
       }
+      // for (let [name, value] of formData.entries()) {
+      //   console.log(name + ":" + value);
+      // }
     },
   },
 };
