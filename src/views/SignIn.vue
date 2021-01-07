@@ -82,6 +82,7 @@ export default {
           email: this.email,
           password: this.password,
         });
+        // console.log("response", response);
         // 取得 API 請求後的資料
         const { data } = response;
         // 驗證狀態
@@ -91,6 +92,9 @@ export default {
 
         // 將 token 存放在 localStorage 內
         localStorage.setItem("token", data.token);
+
+        //  將資料傳到 VUEX 中，把使用者資訊傳送到 Vuex 裡
+        this.$store.commit("setCurrentUser", data.user);
 
         // 成功登入後轉址到餐廳首頁
         this.$router.push("/restaurants");

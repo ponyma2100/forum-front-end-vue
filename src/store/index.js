@@ -21,7 +21,7 @@ export default new Vuex.Store({
       // currentUser - 接收從 Vue component 傳入的資料，通常會以「想要更新的 state 屬性」來命名這組參數
       state.currentUser = {
         ...state.currentUser,
-        // 將 API 取得的 currentUser 覆蓋掉 Vuex state 中的 currentUser
+        // 將 API 取得的 currentUser(data.user傳入的資料) 覆蓋掉 Vuex state 中的 currentUser
         ...currentUser
       }
       state.isAuthenticated = true
