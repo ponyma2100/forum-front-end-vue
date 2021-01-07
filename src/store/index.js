@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import userAPI from './../apis/users'
 
 Vue.use(Vuex)
 
@@ -15,6 +16,7 @@ export default new Vuex.Store({
     },
     isAuthenticated: false
   },
+  //  commit 發動 mutations
   mutations: {
     setCurrentUser(state, currentUser) {
       // state - 傳入上方的 state 物件，準備變更物件內容
@@ -27,7 +29,26 @@ export default new Vuex.Store({
       state.isAuthenticated = true
     }
   },
+  // dispatch 發動 actions
   actions: {
+    // 在 actions 中可以透過參數的方式取得 commit 的方法
+    async fetchCurrentUser({ commit }) {
+      try {
+        const { data } = await userAPI.getCurrentUser()
+        const { id, name, email, image, isAdmin } = data
+
+        commit('setCurrentUser', {
+          id,
+          name,
+          email,
+          image,
+          isAdmin
+        })
+
+      } catch (error) {
+        console.log('error', error)
+      }
+    }
   },
   modules: {
   }

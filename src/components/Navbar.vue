@@ -47,6 +47,7 @@ import { mapState } from "vuex";
 
 export default {
   computed: {
+    // 把 Vuex 中的哪些資料，以 computed 的方式帶入 Vue 內。
     ...mapState(["currentUser", "isAuthenticated"]),
   },
 };
