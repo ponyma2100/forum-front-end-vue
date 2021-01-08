@@ -80,15 +80,23 @@ import { emptyImageFilter } from "./../utils/mixins";
 export default {
   mixins: [emptyImageFilter],
 
+  props: {
+    initialRestaurant: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       restaurant: this.initialRestaurant,
     };
   },
-  props: {
-    initialRestaurant: {
-      type: Object,
-      required: true,
+  watch: {
+    initialRestaurant(newValue) {
+      this.restaurant = {
+        ...this.restaurant,
+        ...newValue,
+      };
     },
   },
   methods: {
