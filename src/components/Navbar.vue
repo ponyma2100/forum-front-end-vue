@@ -33,6 +33,7 @@
           <button
             type="button"
             class="btn btn-sm btn-outline-success my-2 my-sm-0"
+            @click="logout"
           >
             登出
           </button>
@@ -49,6 +50,12 @@ export default {
   computed: {
     // 把 Vuex 中的哪些資料，以 computed 的方式帶入 Vue 內。
     ...mapState(["currentUser", "isAuthenticated"]),
+  },
+  methods: {
+    logout() {
+      this.$store.commit("revokeAuthentication");
+      this.$router.push("/signin");
+    },
   },
 };
 // without API //
