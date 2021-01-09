@@ -27,23 +27,11 @@
 
 <script>
 import { fromNowFilter } from "./../utils/mixins";
+import commentsAPI from "./../apis/comments";
+import { Toast } from "./../utils/helpers";
+import { mapState } from "vuex";
 
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "管理者",
-    email: "root@example.com",
-    image: "https://i.pravatar.cc/300",
-    isAdmin: true,
-  },
-  isAuthenticated: true,
-};
 export default {
-  data() {
-    return {
-      currentUser: dummyUser.currentUser,
-    };
-  },
   mixins: [fromNowFilter],
   props: {
     restaurantComments: {
@@ -51,12 +39,31 @@ export default {
       requrired: true,
     },
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   methods: {
-    handleDeleteButtonClick(commentId) {
-      console.log("handleDeleteButtonClick", commentId);
-      // TODO: 請求 API 伺服器刪除 id 為 commentId 的評論
-      // 觸發父層事件 - $emit( '事件名稱' , 傳遞的資料 )
-      this.$emit("after-delete-comment", commentId);
+    async handleDeleteButtonClick(commentId) {
+      try {
+        // TODO: 請求 API 伺服器刪除 id 為 commentId 的評論
+        const { data } = await commentsAPI.delete({ commentId });
+        // console.log("data", data);
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        // 觸發父層事件 - $emit( '事件名稱' , 傳遞的資料 )
+        this.$emit("after-delete-comment", commentId);
+        Toast.fire({
+          icon: "success",
+          title: "移除評論成功",
+        });
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法刪除評論，請稍後再試",
+        });
+      }
     },
   },
 };
