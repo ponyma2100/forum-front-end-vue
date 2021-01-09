@@ -21,86 +21,8 @@
 </template>
 
 <script>
-const dummyData = {
-  restaurant: {
-    id: 1,
-    name: "Loren Gulgowski",
-    tel: "695.115.9032",
-    address: "497 Abbott Estates",
-    opening_hours: "08:00",
-    description: "inventore",
-    image: "https://i.imgur.com/XVI21KR.jpg",
-    viewCounts: 32,
-    createdAt: "2020-12-15T06:35:43.000Z",
-    updatedAt: "2020-12-25T06:34:59.000Z",
-    CategoryId: 5,
-    Category: {
-      id: 5,
-      name: "素食料理",
-      createdAt: "2020-12-15T06:35:43.000Z",
-      updatedAt: "2020-12-15T06:35:43.000Z",
-    },
-    Comments: [
-      {
-        id: 1,
-        text: "Placeat aut molestiae incidunt repudiandae modi nulla a in.",
-        UserId: 2,
-        RestaurantId: 1,
-        createdAt: "2020-12-15T06:35:43.000Z",
-        updatedAt: "2020-12-15T06:35:43.000Z",
-        User: {
-          id: 2,
-          name: "user1",
-          email: "user1@example.com",
-          password:
-            "$2a$10$m11qLlDOol1b3XCa393Bwe.hW4mt/6DS.mUsgFtati5LW4BbX81EG",
-          isAdmin: false,
-          image: null,
-          createdAt: "2020-12-15T06:35:43.000Z",
-          updatedAt: "2020-12-20T01:32:03.000Z",
-        },
-      },
-      {
-        id: 51,
-        text: "Et aut molestiae autem.",
-        UserId: 1,
-        RestaurantId: 1,
-        createdAt: "2020-12-15T06:35:43.000Z",
-        updatedAt: "2020-12-15T06:35:43.000Z",
-        User: {
-          id: 1,
-          name: "user1@example.com",
-          email: "root@example.com",
-          password:
-            "$2a$10$jBS/Y4.hceDXkEC5y9ZGne81Y7i5wNwNcy6wAKjNdBykCzlEfWmLm",
-          isAdmin: true,
-          image: null,
-          createdAt: "2020-12-15T06:35:43.000Z",
-          updatedAt: "2020-12-25T03:28:20.000Z",
-        },
-      },
-      {
-        id: 101,
-        text: "A et magni quidem in et magnam.",
-        UserId: 2,
-        RestaurantId: 1,
-        createdAt: "2020-12-15T06:35:43.000Z",
-        updatedAt: "2020-12-15T06:35:43.000Z",
-        User: {
-          id: 2,
-          name: "user1",
-          email: "user1@example.com",
-          password:
-            "$2a$10$m11qLlDOol1b3XCa393Bwe.hW4mt/6DS.mUsgFtati5LW4BbX81EG",
-          isAdmin: false,
-          image: null,
-          createdAt: "2020-12-15T06:35:43.000Z",
-          updatedAt: "2020-12-20T01:32:03.000Z",
-        },
-      },
-    ],
-  },
-};
+import restaurantsAPI from "./../apis/restaurants";
+import { Toast } from "./../utils/helpers";
 
 export default {
   data() {
@@ -117,37 +39,55 @@ export default {
       commentsLength: "",
     };
   },
-
+  beforeRouteUpdate(to, from, next) {
+    // console.log("to", to);
+    // console.log("from", from);
+    const { id: restaurantId } = to.params;
+    this.fetchDashboard(restaurantId);
+    next();
+  },
   created() {
     const { id: restaurantId } = this.$route.params;
     this.fetchDashboard(restaurantId);
   },
 
   methods: {
-    fetchDashboard(restaurantId) {
-      // console.log("fetchRestaurant id: ", restaurantId);
-      const { restaurant } = dummyData;
-      const {
-        id,
-        name,
-        image,
-        CategoryId,
-        categoryName,
-        viewCounts,
-        Comments,
-        Category,
-      } = restaurant;
+    async fetchDashboard(restaurantId) {
+      try {
+        const { data } = await restaurantsAPI.getRestaurant({ restaurantId });
+        // console.log(data.restaurant);
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        const {
+          id,
+          name,
+          image,
+          CategoryId,
+          categoryName,
+          viewCounts,
+          Comments,
+          Category,
+        } = data.restaurant;
 
-      this.restaurant = {
-        id,
-        name,
-        image,
-        CategoryId,
-        categoryName: Category.name,
-        viewCounts,
-        commentsLength: Comments.length,
-      };
-      this.Comments = Comments;
+        this.restaurant = {
+          id,
+          name,
+          image,
+          CategoryId,
+          categoryName: Category ? Category.name : "未分類",
+          viewCounts,
+          commentsLength: Comments.length,
+        };
+        this.Comments = Comments;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得餐廳資料，請稍後再試",
+        });
+      }
+      // console.log("fetchRestaurant id: ", restaurantId);
     },
   },
 };
