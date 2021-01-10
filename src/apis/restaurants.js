@@ -9,17 +9,13 @@ export default {
     )
   },
   getRestaurant({ restaurantId }) {
-    return apiHelper.get(`/restaurants/${restaurantId}`, {
-      headers: { Authorization: `Bearer ${getToken()}` }
-    })
+    return apiHelper.get(`/restaurants/${restaurantId}`)
   },
   getRestaurantsTop() {
     return apiHelper.get('/restaurants/top',
       { headers: { Authorization: `Bearer ${getToken()}` } })
   },
   getRestaurantsFeeds() {
-    return apiHelper.get('/restaurants/feeds', {
-      headers: { Authorization: `Bearer ${getToken()}` }
-    })
+    return apiHelper.get('/restaurants/feeds')
   }
 }
