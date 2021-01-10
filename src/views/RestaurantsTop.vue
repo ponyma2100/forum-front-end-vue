@@ -1,57 +1,60 @@
 <template>
   <div class="container py-5">
     <NavTabs />
-    <h1 class="mt-5">人氣餐廳</h1>
+    <Spinner v-if="isLoading" />
+    <template v-else>
+      <h1 class="mt-5">人氣餐廳</h1>
+      <hr />
+      <div
+        class="card mb-3"
+        style="max-width: 540px; margin: auto"
+        v-for="restaurant in restaurants"
+        :key="restaurant.id"
+      >
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <a href="#">
+              <img class="card-img" :src="restaurant.image | emptyImage" />
+            </a>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ restaurant.name }}</h5>
+              <span class="badge badge-secondary"
+                >收藏數：{{ restaurant.FavoriteCount }}</span
+              >
+              <p class="card-text">
+                {{ restaurant.description }}
+              </p>
+              <a href="#" class="btn btn-primary mr-2">Show</a>
 
-    <hr />
-    <div
-      class="card mb-3"
-      style="max-width: 540px; margin: auto"
-      v-for="restaurant in restaurants"
-      :key="restaurant.id"
-    >
-      <div class="row no-gutters">
-        <div class="col-md-4">
-          <a href="#">
-            <img class="card-img" :src="restaurant.image | emptyImage" />
-          </a>
-        </div>
-        <div class="col-md-8">
-          <div class="card-body">
-            <h5 class="card-title">{{ restaurant.name }}</h5>
-            <span class="badge badge-secondary"
-              >收藏數：{{ restaurant.FavoriteCount }}</span
-            >
-            <p class="card-text">
-              {{ restaurant.description }}
-            </p>
-            <a href="#" class="btn btn-primary mr-2">Show</a>
-
-            <button
-              v-if="restaurant.isFavorited"
-              @click.stop.prevent="deleteFavorite(restaurant.id)"
-              type="button"
-              class="btn btn-danger mr-2"
-            >
-              移除最愛
-            </button>
-            <button
-              v-else
-              @click.stop.prevent="addFavorite(restaurant.id)"
-              type="button"
-              class="btn btn-primary"
-            >
-              加到最愛
-            </button>
+              <button
+                v-if="restaurant.isFavorited"
+                @click.stop.prevent="deleteFavorite(restaurant.id)"
+                type="button"
+                class="btn btn-danger mr-2"
+              >
+                移除最愛
+              </button>
+              <button
+                v-else
+                @click.stop.prevent="addFavorite(restaurant.id)"
+                type="button"
+                class="btn btn-primary"
+              >
+                加到最愛
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script>
 import NavTabs from "./../components/NavTabs";
+import Spinner from "./../components/Spinner";
 import { emptyImageFilter } from "./../utils/mixins";
 import restaurantsAPI from "./../apis/restaurants";
 import userAPI from "./../apis/users";
@@ -61,10 +64,12 @@ export default {
   mixins: [emptyImageFilter],
   components: {
     NavTabs,
+    Spinner,
   },
   data() {
     return {
       restaurants: [],
+      isLoading: true,
     };
   },
   created() {
@@ -73,10 +78,14 @@ export default {
   methods: {
     async fetchTopRestaurant() {
       try {
+        this.isLoading = true;
         const { data } = await restaurantsAPI.getRestaurantsTop();
         console.log(data);
         this.restaurants = data.restaurants;
+        this.isLoading = false;
       } catch (error) {
+        this.isLoading = false;
+
         console.log("error", error);
         Toast.fire({
           icon: "error",

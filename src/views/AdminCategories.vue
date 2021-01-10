@@ -24,7 +24,8 @@
         </div>
       </div>
     </form>
-    <table class="table">
+    <Spinner v-if="isLoading" />
+    <table class="table" v-else>
       <thead class="thead-dark">
         <tr>
           <th scope="col" width="60">#</th>
@@ -92,6 +93,7 @@
 
 <script>
 import AdminNav from "./../components/AdminNav";
+import Spinner from "./../components/Spinner";
 import { v4 as uuidv4 } from "uuid";
 
 const dummyData = {
@@ -126,11 +128,13 @@ const dummyData = {
 export default {
   components: {
     AdminNav,
+    Spinner,
   },
   data() {
     return {
       categories: [],
       newCategoryName: "",
+      isLoading: true,
     };
   },
   created() {
@@ -138,6 +142,7 @@ export default {
   },
   methods: {
     fetchCategories() {
+      this.isLoading = true;
       const { categories } = dummyData;
       // 在每一個 category 中都添加一個 isEditing 屬性
       this.categories = categories.map((category) => ({
@@ -145,6 +150,7 @@ export default {
         isEditing: false,
         nameCached: "",
       }));
+      this.isLoading = false;
     },
     createCategory(categoryName) {
       // TODO: 透過 API 告知伺服器欲新增的餐廳類別...
