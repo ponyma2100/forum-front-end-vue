@@ -4,6 +4,7 @@
     <UserProfileCard
       :user="user"
       :is-current-user="currentUser.id === user.id"
+      :initial-is-followed="isFollowed"
     />
     <!-- UserFollowingsCard -->
     <!-- UserFollowersCard -->
@@ -61,6 +62,7 @@ export default {
           Followers,
           Followings,
         } = data.profile;
+        const isFollowed = data;
 
         this.user = {
           ...this.user,
@@ -73,6 +75,11 @@ export default {
           commentsLength: Comments.length,
           favoritedRestaurantsLength: FavoritedRestaurants.length,
         };
+
+        this.isFollowed = isFollowed;
+        this.followers = Followers;
+        this.favoritedRestaurants = FavoritedRestaurants;
+        this.comments = Comments.filter((comment) => comment.Restaurant);
       } catch (error) {
         console.log(error);
       }

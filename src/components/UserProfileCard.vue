@@ -29,13 +29,21 @@
           </template>
           <template v-else>
             <button
-              @click.stop.prevent="addFollowing"
+              v-if="isFollowed"
+              @click.stop.prevent="deleteFollowing(user.id)"
               type="button"
               class="btn btn-danger"
             >
               取消追蹤
             </button>
-            <button type="button" class="btn btn-primary">追蹤</button>
+            <button
+              v-else
+              @click.stop.prevent="addFollowing(user.id)"
+              type="button"
+              class="btn btn-primary"
+            >
+              追蹤
+            </button>
           </template>
         </div>
       </div>
@@ -53,6 +61,23 @@ export default {
     isCurrentUser: {
       type: Boolean,
       required: true,
+    },
+    initialIsFollowed: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      isFollowed: this.initialIsFollowed,
+    };
+  },
+  methods: {
+    addFollowing(userId) {
+      this.isFollowed = true;
+    },
+    deleteFollowing(userId) {
+      this.isFollowed = false;
     },
   },
 };
