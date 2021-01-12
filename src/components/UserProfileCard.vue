@@ -6,14 +6,18 @@
       </div>
       <div class="col-md-8">
         <div class="card-body">
-          <h5 class="card-title">{{ user.name }}</h5>
-          <p class="card-text">{{ user.email }}</p>
-          <ul class="list-unstyled list-inline">
+          <h5 class="card-title">
+            {{ user.name }}
+          </h5>
+          <p class="card-text">
+            {{ user.email }}
+          </p>
+          <ul class="list-unstyled">
             <li>
               <strong>{{ user.commentsLength }}</strong> 已評論餐廳
             </li>
             <li>
-              <strong>{{ user.favoritedRestaurantsLenth }}</strong> 收藏的餐廳
+              <strong>{{ user.favoritedRestaurantsLength }}</strong> 收藏的餐廳
             </li>
             <li>
               <strong>{{ user.followingsLength }}</strong> followings (追蹤者)
@@ -23,24 +27,27 @@
             </li>
           </ul>
           <template v-if="isCurrentUser">
-            <a href="/users/1/edit"
-              ><button type="submit" class="btn btn-primary">edit</button></a
+            <router-link
+              :to="{ name: 'user-edit', params: { id: user.id } }"
+              class="btn btn-primary"
             >
+              Edit
+            </router-link>
           </template>
           <template v-else>
             <button
               v-if="isFollowed"
-              @click.stop.prevent="deleteFollowing(user.id)"
               type="button"
               class="btn btn-danger"
+              @click.stop.prevent="deleteFollowing(user.id)"
             >
               取消追蹤
             </button>
             <button
               v-else
-              @click.stop.prevent="addFollowing(user.id)"
               type="button"
               class="btn btn-primary"
+              @click.stop.prevent="addFollowing(user.id)"
             >
               追蹤
             </button>
@@ -52,6 +59,8 @@
 </template>
 
 <script>
+import userAPI from "./../apis/users";
+import { Toast } from "./../utils/helpers";
 export default {
   props: {
     user: {
@@ -73,11 +82,37 @@ export default {
     };
   },
   methods: {
-    addFollowing(userId) {
-      this.isFollowed = true;
+    async addFollowing(userId) {
+      try {
+        const { data } = await userAPI.addFollowing({ userId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.isFollowed = true;
+        this.followersLength += 1;
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法成功加入追蹤，請稍後再試",
+        });
+      }
     },
-    deleteFollowing(userId) {
-      this.isFollowed = false;
+    async deleteFollowing(userId) {
+      try {
+        const { data } = await userAPI.deleteFollowing({ userId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.isFollowed = false;
+        this.followersLength -= 1;
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法成取消追蹤，請稍後再試",
+        });
+      }
     },
   },
 };

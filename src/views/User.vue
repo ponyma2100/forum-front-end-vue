@@ -51,6 +51,8 @@ export default {
     async fetchUser(userId) {
       try {
         const { data } = await userAPI.get({ userId });
+        const { profile, isFollowed } = data;
+
         console.log(data);
         const {
           id,
@@ -62,7 +64,6 @@ export default {
           Followers,
           Followings,
         } = data.profile;
-        const isFollowed = data;
 
         this.user = {
           ...this.user,
