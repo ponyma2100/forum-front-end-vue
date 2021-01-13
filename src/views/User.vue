@@ -13,6 +13,9 @@
     <!-- UserCommentsCard -->
     <UserCommentsCard :comments="comments" />
     <!-- UserFavoritedRestaurantsCard -->
+    <UserFavoritedRestaurantsCard
+      :favoritedRestaurants="favoritedRestaurants"
+    />
   </div>
 </template>
 
@@ -22,6 +25,7 @@ import UserProfileCard from "./../components/UserProfileCard";
 import UserFollowingsCard from "./../components/UserFollowingsCard";
 import UserFollowersCard from "./../components/UserFollowersCard";
 import UserCommentsCard from "./../components/UserCommentsCard";
+import UserFavoritedRestaurantsCard from "./../components/UserFavoritedRestaurantsCard";
 import { mapState } from "vuex";
 
 export default {
@@ -30,6 +34,7 @@ export default {
     UserFollowingsCard,
     UserFollowersCard,
     UserCommentsCard,
+    UserFavoritedRestaurantsCard,
   },
   data() {
     return {
