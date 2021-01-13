@@ -9,6 +9,7 @@
     <!-- UserFollowingsCard -->
     <UserFollowingsCard :user="user" :followings="followings" />
     <!-- UserFollowersCard -->
+    <UserFollowersCard :user="user" :followers="followers" />
     <!-- UserCommentsCard -->
     <!-- UserFavoritedRestaurantsCard -->
   </div>
@@ -18,11 +19,14 @@
 import userAPI from "./../apis/users";
 import UserProfileCard from "./../components/UserProfileCard";
 import UserFollowingsCard from "./../components/UserFollowingsCard";
+import UserFollowersCard from "./../components/UserFollowersCard";
 import { mapState } from "vuex";
+
 export default {
   components: {
     UserProfileCard,
     UserFollowingsCard,
+    UserFollowersCard,
   },
   data() {
     return {
