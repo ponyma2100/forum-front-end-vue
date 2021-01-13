@@ -6,16 +6,22 @@
       :is-current-user="currentUser.id === user.id"
       :initial-is-followed="isFollowed"
     />
-    <!-- UserFollowingsCard -->
-    <UserFollowingsCard :user="user" :followings="followings" />
-    <!-- UserFollowersCard -->
-    <UserFollowersCard :user="user" :followers="followers" />
-    <!-- UserCommentsCard -->
-    <UserCommentsCard :comments="comments" />
-    <!-- UserFavoritedRestaurantsCard -->
-    <UserFavoritedRestaurantsCard
-      :favoritedRestaurants="favoritedRestaurants"
-    />
+    <div class="row">
+      <div class="col-md-4">
+        <!-- UserFollowingsCard -->
+        <UserFollowingsCard :user="user" :followings="followings" />
+        <!-- UserFollowersCard -->
+        <UserFollowersCard :user="user" :followers="followers" />
+      </div>
+      <!-- UserCommentsCard -->
+      <div class="col-md-8">
+        <UserCommentsCard :comments="comments" />
+        <!-- UserFavoritedRestaurantsCard -->
+        <UserFavoritedRestaurantsCard
+          :favoritedRestaurants="favoritedRestaurants"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
