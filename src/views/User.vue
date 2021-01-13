@@ -11,6 +11,7 @@
     <!-- UserFollowersCard -->
     <UserFollowersCard :user="user" :followers="followers" />
     <!-- UserCommentsCard -->
+    <UserCommentsCard :comments="comments" />
     <!-- UserFavoritedRestaurantsCard -->
   </div>
 </template>
@@ -20,6 +21,7 @@ import userAPI from "./../apis/users";
 import UserProfileCard from "./../components/UserProfileCard";
 import UserFollowingsCard from "./../components/UserFollowingsCard";
 import UserFollowersCard from "./../components/UserFollowersCard";
+import UserCommentsCard from "./../components/UserCommentsCard";
 import { mapState } from "vuex";
 
 export default {
@@ -27,6 +29,7 @@ export default {
     UserProfileCard,
     UserFollowingsCard,
     UserFollowersCard,
+    UserCommentsCard,
   },
   data() {
     return {
@@ -43,7 +46,7 @@ export default {
       isFollowed: false,
       followings: [],
       followers: [],
-      Comments: [],
+      comments: [],
       favoritedRestaurants: [],
     };
   },
@@ -83,7 +86,7 @@ export default {
           commentsLength: Comments.length,
           favoritedRestaurantsLength: FavoritedRestaurants.length,
         };
-        this.Comments = Comments.filter((comment) => comment.Restaurant);
+        this.comments = Comments.filter((comment) => comment.Restaurant);
         this.isFollowed = isFollowed;
         this.followers = Followers;
         this.followings = Followings;
