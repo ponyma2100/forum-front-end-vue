@@ -7,6 +7,7 @@
       :initial-is-followed="isFollowed"
     />
     <!-- UserFollowingsCard -->
+    <UserFollowingsCard :user="user" :followings="followings" />
     <!-- UserFollowersCard -->
     <!-- UserCommentsCard -->
     <!-- UserFavoritedRestaurantsCard -->
@@ -16,10 +17,12 @@
 <script>
 import userAPI from "./../apis/users";
 import UserProfileCard from "./../components/UserProfileCard";
+import UserFollowingsCard from "./../components/UserFollowingsCard";
 import { mapState } from "vuex";
 export default {
   components: {
     UserProfileCard,
+    UserFollowingsCard,
   },
   data() {
     return {
@@ -76,11 +79,11 @@ export default {
           commentsLength: Comments.length,
           favoritedRestaurantsLength: FavoritedRestaurants.length,
         };
-
+        this.Comments = Comments.filter((comment) => comment.Restaurant);
         this.isFollowed = isFollowed;
         this.followers = Followers;
+        this.followings = Followings;
         this.favoritedRestaurants = FavoritedRestaurants;
-        this.comments = Comments.filter((comment) => comment.Restaurant);
       } catch (error) {
         console.log(error);
       }

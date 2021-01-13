@@ -89,7 +89,6 @@ export default {
           throw new Error(data.message);
         }
         this.isFollowed = true;
-        this.followersLength += 1;
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -105,12 +104,11 @@ export default {
           throw new Error(data.message);
         }
         this.isFollowed = false;
-        this.followersLength -= 1;
       } catch (error) {
         console.log(error);
         Toast.fire({
           icon: "error",
-          title: "無法成取消追蹤，請稍後再試",
+          title: "無法取消追蹤，請稍後再試",
         });
       }
     },
