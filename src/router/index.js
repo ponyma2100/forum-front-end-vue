@@ -109,6 +109,12 @@ const routes = [
     beforeEnter: authorizeIsAdmin
   },
   {
+    path: '/admin/users',
+    name: 'admin-users',
+    component: () => import('./../views/AdminUsers'),
+    beforeEnter: authorizeIsAdmin
+  },
+  {
     path: '*',
     name: 'not-found',
     component: NotFound,

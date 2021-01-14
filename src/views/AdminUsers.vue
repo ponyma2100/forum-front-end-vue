@@ -1,34 +1,66 @@
 <template>
   <div class="container py-5">
     <!-- AdminNav Component -->
-
+    <AdminNav />
     <table class="table">
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
+          <th scope="col">Name</th>
           <th scope="col">Email</th>
           <th scope="col">Role</th>
-          <th scope="col" width="140">Action</th>
+          <th scope="col">#</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr v-for="user in users" :key="user.id">
           <th scope="row">1</th>
-          <td>root@example.com</td>
-          <td>admin</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.isAdmin ? "admin" : "user" }}</td>
           <td>
-            <button type="button" class="btn btn-link">set as user</button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>user1@example.com</td>
-          <td>user</td>
-          <td>
-            <button type="button" class="btn btn-link">set as admin</button>
+            <form
+              action="/admin/users/1?_method=PUT"
+              method="POST"
+              style="display: inline"
+            >
+              <input type="hidden" name="isAdmin" value="false" />
+              <button type="submit" class="btn btn-link">set as user</button>
+            </form>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
+
+<script>
+import AdminNav from "./../components/AdminNav";
+import adminAPI from "./../apis/admin";
+
+export default {
+  components: {
+    AdminNav,
+  },
+  data() {
+    return {
+      users: [],
+    };
+  },
+  created() {
+    this.fetchUser();
+  },
+  methods: {
+    async fetchUser() {
+      try {
+        const { data } = await adminAPI.users.get();
+        // console.log(data);
+        const { users } = data;
+        this.users = users;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+};
+</script>
