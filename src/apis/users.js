@@ -8,7 +8,9 @@ export default {
   get({ userId }) {
     return apiHelper.get(`/users/${userId}`)
   },
-
+  update({ userId, formData }) {
+    return apiHelper.put(`/users/${userId}`, formData)
+  },
   // post參數的data發送的資料，如果沒有則寫 null
   addFavorite({ restaurantId }) {
     return apiHelper.post(`/favorite/${restaurantId}`, null)
